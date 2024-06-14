@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <title>Клиенты</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/css/clients.css">
+</head>
+<body>
+    <div class="container">
+    <h2>Клиенты, ответственный: {{ user_name }}</h2>
+
+      <form action="/logout" method="post">
+            <input type="submit" id="exit" value="Выйти">
+      </form>
+
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Номер счета</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Дата рождения</th>
+                <th>ИНН</th>
+                <th>Статус</th>
+                <th>Изменить статус</th>
+            </tr>
+        </thead>
+        {% for client in clients %}
+        <tbody>
+            <tr>
+                <td>{{ client.id }}</td>
+                <td>{{ client.surname }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.patronymic }}</td>
+                <td>{{ client.dob }}</td>
+                <td>{{ client.inn }}</td>
+                <td>{{ client.status }}</td>
+                <td>
+                    <form action="/update_status" method="post">
+                        <input type="hidden" name="id" value="{{ client.id }}">
+                        <input type="hidden" name="user_name" value="{{ user_name }}">
+                        <select name="status">
+                            <option value="Не в работе" {% if client.status == "Не в работе" %}selected{% endif %}>Не в работе</option>
+                            <option value="В работе" {% if client.status == "В работе" %}selected{% endif %}>В работе</option>
+                            <option value="Отказ" {% if client.status == "Отказ" %}selected{% endif %}>Отказ</option>
+                            <option value="Сделка закрыта" {% if client.status == "Сделка закрыта" %}selected{% endif %}>Сделка закрыта</option>
+                        </select>
+                        <input type="submit" value="Изменить">
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</body>
+</html>
